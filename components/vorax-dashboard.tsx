@@ -6,18 +6,12 @@ import { Activity, AudioLines, Battery, Bell, ChevronDown, Command, Cpu, Fingerp
 type ThemeName = 'Dark Shadow' | 'Cyber Overdrive' | 'Supreme Elite'
 
 type VoiceProfile = { name: string; pitch: number; rate: number; description: string }
-const voiceProfiles: VoiceProfile[] = [
-  { name: 'ABYSS', pitch: 0.72, rate: 0.86, description: 'Deep and measured' },
-  { name: 'OVERLORD', pitch: 0.82, rate: 0.94, description: 'Commanding and steady' },
-  { name: 'PHANTOM', pitch: 0.92, rate: 0.82, description: 'Quiet and mysterious' },
-  { name: 'TITAN', pitch: 0.68, rate: 0.92, description: 'Heavy and powerful' },
-  { name: 'NEMESIS', pitch: 0.78, rate: 1.04, description: 'Sharp and intense' },
-  { name: 'SPECTRE', pitch: 1.08, rate: 0.96, description: 'Synthetic and futuristic' },
-  { name: 'OMEGA', pitch: 0.88, rate: 0.9, description: 'Calm and composed' },
-  { name: 'SHADOW', pitch: 0.64, rate: 0.8, description: 'Low and restrained' },
-  { name: 'APEX', pitch: 1.0, rate: 1.02, description: 'Crisp and precise' },
-  { name: 'VOID', pitch: 0.74, rate: 0.76, description: 'Slow and atmospheric' },
-]
+const voiceProfilePreset: VoiceProfile = {
+  name: 'VØRAX — DARK PHANTOM',
+  pitch: 0.62,
+  rate: 1.08,
+  description: 'Energetic • deep robotic • shadow-horror presence',
+}
 
 const themes: { name: ThemeName; color: string }[] = [
   { name: 'Dark Shadow', color: '#e11d48' },
@@ -83,7 +77,7 @@ export default function VoraxDashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [notifications, setNotifications] = useState(true)
-  const [voiceProfile, setVoiceProfile] = useState('ABYSS')
+  const [voiceProfile] = useState('VØRAX — DARK PHANTOM')
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isListening, setIsListening] = useState(false)
 
@@ -93,7 +87,7 @@ export default function VoraxDashboard() {
       return
     }
     window.speechSynthesis.cancel()
-    const profile = voiceProfiles.find((item) => item.name === profileName) ?? voiceProfiles[0]
+    const profile = voiceProfilePreset
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = 'en-IN'
     utterance.pitch = profile.pitch
@@ -172,6 +166,6 @@ export default function VoraxDashboard() {
       <footer className="page-footer"><span>VØRAX <span className="footer-sep">/</span> PERSONAL INTELLIGENCE SYSTEM</span><span>BUILT FOR THE NEXT ERA <span className="footer-sep">·</span> <span className="footer-version">V.2.4.0</span></span></footer>
     </div>
 
-    {settingsOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false) }}><section className="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="modal-heading"><div><span className="eyebrow-small">PREFERENCES / 01</span><h2 id="settings-title">System settings</h2></div><button className="icon-button" aria-label="Close settings" onClick={() => setSettingsOpen(false)}>×</button></div><div className="setting-group"><b>Interface theme</b><p>Choose the visual profile for your command center.</p>{themes.map((option) => <button key={option.name} className={`modal-theme ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span>ACTIVE</span>}</button>)}</div><div className="setting-group notification-setting"><div><b>System notifications</b><p>Show local interface status messages.</p></div><button className={`toggle ${notifications ? 'on' : ''}`} role="switch" aria-checked={notifications} aria-label="System notifications" onClick={() => setNotifications(!notifications)}><i /></button></div><div className="setting-group"><b>VØRAX voice profile</b><p>Preview these ten pitch-and-speed profiles using your browser's installed speech voice. They are presets, not ten separate neural voices.</p><div className="voice-profile-list">{voiceProfiles.map((profile) => <div key={profile.name} className="voice-profile-row"><div><b>{profile.name}</b><span>{profile.description}</span></div><button className={voiceProfile === profile.name ? 'voice-selected' : ''} onClick={() => setVoiceProfile(profile.name)}>{voiceProfile === profile.name ? 'SELECTED' : 'SELECT'}</button><button onClick={() => speak('I am VORAX. The Supreme Intelligence. Systems online. Awaiting your command.', profile.name)}>PREVIEW</button></div>)}</div><button className="text-button" onClick={() => { window.speechSynthesis?.cancel(); setIsSpeaking(false) }}>STOP VOICE</button></div><div className="modal-note"><Shield size={14} /> Voice recognition runs only after you tap the microphone while this page is open. Background “Hey VØRAX” wake-word support requires a native Android app.</div></section></div>}
+    {settingsOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false) }}><section className="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="modal-heading"><div><span className="eyebrow-small">PREFERENCES / 01</span><h2 id="settings-title">System settings</h2></div><button className="icon-button" aria-label="Close settings" onClick={() => setSettingsOpen(false)}>×</button></div><div className="setting-group"><b>Interface theme</b><p>Choose the visual profile for your command center.</p>{themes.map((option) => <button key={option.name} className={`modal-theme ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span>ACTIVE</span>}</button>)}</div><div className="setting-group notification-setting"><div><b>System notifications</b><p>Show local interface status messages.</p></div><button className={`toggle ${notifications ? 'on' : ''}`} role="switch" aria-checked={notifications} aria-label="System notifications" onClick={() => setNotifications(!notifications)}><i /></button></div><div className="setting-group"><b>VØRAX signature voice</b><p>One unified voice identity: energetic delivery, deep robotic tone and a dark phantom atmosphere. Actual voice texture depends on the browser's installed speech engine.</p><div className="voice-profile-row signature-voice"><div><b>DARK PHANTOM</b><span>Energetic · Horror · Shadow · Robotic</span></div><button className="voice-selected" onClick={() => speak('I am VORAX. The dark phantom intelligence. Enter the void. Your command awaits.', voiceProfile)}>PREVIEW</button></div><button className="text-button" onClick={() => { window.speechSynthesis?.cancel(); setIsSpeaking(false) }}>STOP VOICE</button></div><div className="modal-note"><Shield size={14} /> Voice recognition runs only after you tap the microphone while this page is open. Background “Hey VØRAX” wake-word support requires a native Android app.</div></section></div>}
   </main>
 }
