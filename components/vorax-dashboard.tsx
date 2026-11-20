@@ -46,7 +46,7 @@ function ShadowPortal({ expanding, onEnter }: { expanding: boolean; onEnter: () 
   return <main className={`portal-page ${expanding ? 'portal-expanding' : ''}`}>
     <div className="portal-nebula" aria-hidden="true" />
     <div className="portal-grain" aria-hidden="true" />
-    <div className="portal-topline"><a className="portal-brand" href="#portal"><span className="portal-brand-mark">V</span> VØRAX</a><span className="portal-top-status"><i /> SYSTEM DORMANT</span></div>
+    <div className="portal-topline"><a className="portal-brand" href="#portal"><span className="portal-brand-mark vortex-logo-mark" aria-hidden="true"><i /></span> VØRAX</a><span className="portal-top-status"><i /> SYSTEM DORMANT</span></div>
     <div className="portal-copy"><span className="portal-eyebrow"><i /> THE DARK VOID INTELLIGENCE <i /></span><h1>Enter the <span>void.</span></h1><p>Awaken the intelligence beyond.</p></div>
     <button className="shadow-gate" onClick={onEnter} aria-label="Enter the VORAX command center" aria-busy={expanding}>
       <span className="portal-haze haze-one" /><span className="portal-haze haze-two" />
@@ -137,9 +137,9 @@ export default function VoraxDashboard() {
   return <main className={`dashboard theme-${theme.toLowerCase().replaceAll(' ', '-')}`}>
     <header className="topbar">
       <button className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileOpen(!mobileOpen)}><Menu size={18} /></button>
-      <a className="brand" href="#portal" aria-label="Return to VORAX portal" onClick={(event) => { event.preventDefault(); setPortalExpanding(false); setCommandCenterOpen(false) }}><span className="brand-mark">V</span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
+      <a className="brand" href="#portal" aria-label="Return to VORAX portal" onClick={(event) => { event.preventDefault(); setPortalExpanding(false); setCommandCenterOpen(false) }}><span className="brand-mark vortex-logo-mark" aria-hidden="true"><i /></span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
       <nav className={`top-nav ${mobileOpen ? 'nav-open' : ''}`} aria-label="Main navigation"><a className="nav-active" href="#command-center">Command center</a><a href="#activity">Activity</a><a href="#connections">Connections</a></nav>
-      <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> FRONTEND DEMO</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span>V</span><ChevronDown size={13} /></button></div>
+      <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> FRONTEND DEMO</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span className="vortex-logo-mark profile-vortex-mark" aria-hidden="true"><i /></span><ChevronDown size={13} /></button></div>
     </header>
 
     <div className="page-shell" id="command-center">
