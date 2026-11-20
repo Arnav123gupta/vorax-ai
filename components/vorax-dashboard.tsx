@@ -36,18 +36,19 @@ function AICore() {
 
 function ShadowPortal({ expanding, onEnter }: { expanding: boolean; onEnter: () => void }) {
   return <main className={`portal-page ${expanding ? 'portal-expanding' : ''}`}>
+    <div className="portal-nebula" aria-hidden="true" />
     <div className="portal-grain" aria-hidden="true" />
     <div className="portal-topline"><a className="portal-brand" href="#portal"><span className="portal-brand-mark">V</span> VØRAX</a><span className="portal-top-status"><i /> SYSTEM DORMANT</span></div>
-    <div className="portal-copy"><span className="portal-eyebrow"><i /> A SIGNAL IN THE DARK <i /></span><h1>Beyond the <span>veil.</span></h1><p>Intelligence awaits on the other side.</p></div>
+    <div className="portal-copy"><span className="portal-eyebrow"><i /> THE DARK VOID INTELLIGENCE <i /></span><h1>Enter the <span>void.</span></h1><p>Awaken the intelligence beyond.</p></div>
     <button className="shadow-gate" onClick={onEnter} aria-label="Enter the VORAX command center" aria-busy={expanding}>
       <span className="portal-haze haze-one" /><span className="portal-haze haze-two" />
       <span className="portal-ring ring-outer" /><span className="portal-ring ring-middle" /><span className="portal-ring ring-inner" />
-      <span className="portal-rift"><span className="portal-eye"><span className="eye-mark">V</span><i /></span><span className="portal-depth" /></span>
+      <span className="portal-rift"><span className="portal-eye"><i /></span><span className="portal-depth" /></span>
       <span className="portal-orbit orbit-a" /><span className="portal-orbit orbit-b" />
       <span className="portal-particle particle-a" /><span className="portal-particle particle-b" /><span className="portal-particle particle-c" /><span className="portal-particle particle-d" /><span className="portal-particle particle-e" />
       <span className="portal-enter"><span>{expanding ? 'CROSSING THE VEIL' : 'ENTER THE PORTAL'}</span><span aria-hidden="true">↗</span></span>
     </button>
-    <div className="portal-bottom"><span>VØRAX <i> / </i> SUPREME INTELLIGENCE</span><span>BEYOND COMMAND. BEYOND LIMITS.</span></div>
+    <div className="portal-bottom"><span>VØRAX <i> / </i> THE DARK VOID INTELLIGENCE</span><span>ENTER THE VOID. AWAKEN VØRAX.</span></div>
   </main>
 }
 
