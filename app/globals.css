@@ -321,3 +321,76 @@ button { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .core-stage .orbit-one, .core-stage .orbit-two, .core-sphere, .core-sphere::before, .core-sphere::after, .core-vortex-symbol { animation: none !important; }
 }
+
+
+/* VØRAX CORE — dimensional void portal (not a spinning disc) */
+.core-stage { height: 258px; max-width: 360px; perspective: 1100px; }
+.core-stage .orbit-one {
+  width: 226px; height: 188px; border-radius: 50%;
+  transform: rotateX(64deg) rotateZ(-18deg);
+  border: 1px solid transparent;
+  border-top-color: rgba(211,174,255,.9);
+  border-left-color: rgba(139,86,255,.5);
+  border-right-color: rgba(139,86,255,.08);
+  box-shadow: 0 0 18px rgba(151,99,255,.3);
+}
+.core-stage .orbit-two {
+  width: 194px; height: 214px; border-radius: 50%;
+  transform: rotateX(58deg) rotateZ(28deg);
+  border: 1px solid rgba(174,128,255,.32);
+  border-bottom-color: rgba(225,83,139,.42);
+  border-left-color: transparent;
+}
+.core-stage .orbit-three {
+  width: 244px; height: 210px; border-radius: 50%;
+  transform: rotateX(68deg) rotateZ(12deg);
+  border: 1px solid rgba(132,84,224,.2);
+}
+.core-sphere {
+  width: 148px; height: 148px; border-radius: 50%;
+  overflow: visible;
+  background:
+    radial-gradient(ellipse at 50% 50%, #020106 0 21%, #090414 29%, rgba(24,10,43,.95) 43%, transparent 65%),
+    radial-gradient(ellipse at 50% 50%, rgba(153,91,255,.34), rgba(91,43,160,.14) 48%, transparent 72%);
+  box-shadow: 0 0 34px rgba(126,74,224,.38), 0 0 88px rgba(95,45,174,.22), inset 0 0 25px rgba(164,111,255,.12);
+}
+.core-sphere::before {
+  inset: -7px;
+  border-radius: 50%;
+  background: conic-gradient(from 10deg, transparent 0 8%, rgba(207,169,255,.96) 13%, rgba(123,68,221,.18) 20%, transparent 29% 39%, rgba(225,91,151,.7) 47%, rgba(122,70,214,.12) 55%, transparent 64% 76%, rgba(179,137,255,.92) 84%, transparent 94%);
+  filter: blur(3px);
+  opacity: .95;
+  mask-image: radial-gradient(ellipse, transparent 0 33%, #000 40% 57%, transparent 70%);
+  animation: portal-energy-flow 10s linear infinite;
+}
+.core-sphere::after {
+  inset: 31px 25px;
+  border: 1px solid rgba(183,143,255,.52);
+  border-radius: 50%;
+  transform: rotateX(58deg) rotateZ(-24deg);
+  background: radial-gradient(ellipse, #020106 0 37%, rgba(28,12,48,.85) 62%, transparent 72%);
+  box-shadow: 0 0 22px rgba(154,99,255,.55), inset 0 0 18px rgba(124,76,211,.3);
+}
+.core-inner {
+  width: 48px; height: 48px; border: 0; border-radius: 50%;
+  background: radial-gradient(ellipse, #000 0 35%, #090413 60%, rgba(103,58,171,.2) 100%);
+  box-shadow: 0 0 24px rgba(136,83,229,.42), 0 0 48px rgba(99,49,173,.2);
+}
+.core-vortex-symbol {
+  width: 56px; height: 56px;
+  background: conic-gradient(from 0deg, transparent 0 13%, #d7b6ff 19%, #6530b4 27%, transparent 38% 52%, #e08ab5 61%, #6838b6 70%, transparent 82% 91%, #c5a0ff);
+  filter: blur(1.5px);
+  mask-image: radial-gradient(ellipse, transparent 0 17%, #000 25% 49%, transparent 62%);
+  animation: portal-energy-flow 6s linear infinite reverse;
+}
+.core-glint { display: none; }
+.core-label { letter-spacing: .2em; }
+.core-speaking .core-sphere { box-shadow: 0 0 46px rgba(174,123,255,.8), 0 0 110px rgba(125,75,235,.5), inset 0 0 28px rgba(205,174,255,.24); }
+@keyframes portal-energy-flow { to { transform: rotate(360deg); } }
+@media (max-width: 640px) {
+  .core-stage { height: 238px; }
+  .core-stage .orbit-three { width: 220px; height: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .core-stage .orbit-one,.core-stage .orbit-two,.core-stage .orbit-three,.core-sphere::before,.core-vortex-symbol { animation: none !important; }
+}
