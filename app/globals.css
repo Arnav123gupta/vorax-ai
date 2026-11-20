@@ -160,3 +160,58 @@ button { color: inherit; }
   .dashboard::before,.dashboard::after,.topbar,.brand-mark,.page-intro,.eyebrow-line,.dashboard-grid > *, .section-icon svg,.status-pulse,.live-dot,.core-card::after,.core-sphere,.core-inner,.core-inner span,.core-orbit,.conversation-glyph,.privacy-card,.log-entry,.modal-backdrop,.settings-modal,.page-footer { animation: none !important; }
   .panel,.connection-icon,.theme-option,.quick-commands button,.settings-trigger,.mic-button,.command-form button { transition: none !important; }
 }
+
+
+/* VORAX signature mark — animated cosmic vortex */
+.vortex-logo-mark {
+  position: relative;
+  display: inline-grid !important;
+  place-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(151, 105, 255, .58) !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(12, 8, 24, .98) 0 28%, transparent 30%),
+    conic-gradient(from 15deg, #160d2d, #9c5cff, #211044, #e34d86, #170d30, #7652ff, #160d2d) !important;
+  box-shadow: 0 0 9px rgba(139, 92, 246, .42), 0 0 20px rgba(139, 92, 246, .22), inset 0 0 8px rgba(255,255,255,.12) !important;
+  transform: none !important;
+}
+.vortex-logo-mark::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(226, 204, 255, .72);
+  border-right-color: rgba(151, 92, 255, .12);
+  border-radius: 50%;
+  box-shadow: 0 0 7px rgba(175, 120, 255, .8), inset 0 0 7px rgba(143, 76, 255, .45);
+  animation: vorax-logo-spin 7s linear infinite;
+}
+.vortex-logo-mark::after {
+  content: "";
+  position: absolute;
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f2dfff 0 8%, #b77aff 25%, #6930c9 54%, #160d2a 76%);
+  box-shadow: 0 0 7px #a76bff, 0 0 15px rgba(167, 107, 255, .8);
+  animation: vorax-logo-pulse 2.4s ease-in-out infinite;
+}
+.vortex-logo-mark > i {
+  position: absolute;
+  z-index: 2;
+  width: 17%;
+  height: 17%;
+  border-radius: 50%;
+  background: #080510;
+  box-shadow: 0 0 5px #f0d5ff, 0 0 10px #a66aff;
+}
+.brand-mark.vortex-logo-mark { width: 31px; height: 31px; }
+.portal-brand-mark.vortex-logo-mark { width: 28px; height: 28px; }
+.profile-button .profile-vortex-mark { width: 29px; height: 29px; }
+@keyframes vorax-logo-spin { to { transform: rotate(360deg); } }
+@keyframes vorax-logo-pulse { 0%,100% { transform: scale(.86); opacity: .82; } 50% { transform: scale(1.12); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .vortex-logo-mark::before, .vortex-logo-mark::after { animation: none !important; }
+}
