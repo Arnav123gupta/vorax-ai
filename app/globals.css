@@ -73,3 +73,19 @@ button { color: inherit; }
 @keyframes void-breathe { 0%,100% { opacity: .86; box-shadow: 0 0 48px rgba(49,0,79,.2), 0 0 85px rgba(73,0,10,.13), inset 0 0 34px rgba(0,0,0,.95); } 50% { opacity: 1; box-shadow: 0 0 56px rgba(49,0,79,.26), 0 0 96px rgba(73,0,10,.17), inset 0 0 41px rgba(0,0,0,.98); } }
 @media (max-width: 650px) { .portal-nebula { inset: -10% -85%; background-position: center, 69% 0%; animation-duration: 300s; opacity: .82; } .portal-grain { animation-duration: 36s; } }
 @media (prefers-reduced-motion: reduce) { .portal-rift { animation: none !important; } }
+
+/* Voice studio and honest foreground voice states */
+.voice-profile-list { display: flex; flex-direction: column; gap: 5px; max-height: 260px; overflow-y: auto; padding-right: 3px; }
+.voice-profile-row { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: 6px; border: 1px solid #29222e; background: rgba(7,6,10,.62); border-radius: 4px; padding: 7px; }
+.voice-profile-row > div { min-width: 0; }
+.voice-profile-row > div b,.voice-profile-row > div span { display: block; }
+.voice-profile-row > div b { color: #ddd3df; font: 8px var(--font-geist-mono),monospace; letter-spacing: .1em; }
+.voice-profile-row > div span { color: #817985; font-size: 7px; margin-top: 3px; }
+.voice-profile-row button { border: 1px solid #392b3b; background: #120e16; color: #a99aaf; border-radius: 3px; padding: 6px 7px; font: 6px var(--font-geist-mono),monospace; letter-spacing: .06em; cursor: pointer; }
+.voice-profile-row button:hover,.voice-profile-row button.voice-selected { border-color: rgba(var(--accent-rgb),.55); color: #f0dce6; background: rgba(var(--accent-rgb),.1); }
+.mic-button { cursor: pointer; transition: box-shadow .2s, background .2s; }
+.mic-button.is-listening { background: rgba(225,29,72,.25); box-shadow: 0 0 0 5px rgba(225,29,72,.08), 0 0 18px rgba(225,29,72,.25); animation: mic-listen-pulse 1.2s ease-in-out infinite; }
+.core-speaking .core-sphere { animation-duration: 1.1s; box-shadow: 0 0 35px rgba(var(--accent-rgb),.5), 0 0 90px rgba(134,39,219,.24), inset -12px -13px 24px #08070c; }
+.core-speaking .core-orbit { border-color: rgba(var(--accent-rgb),.42); }
+@keyframes mic-listen-pulse { 50% { transform: scale(1.06); } }
+@media (max-width: 430px) { .voice-profile-row { grid-template-columns: minmax(0,1fr) auto; }.voice-profile-row button:last-child { grid-column: 2; } }
