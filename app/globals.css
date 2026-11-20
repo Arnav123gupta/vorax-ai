@@ -401,3 +401,45 @@ button { color: inherit; }
 .quick-label .tag-demo { margin-left: 7px; vertical-align: middle; }
 .core-mode .tag-demo { margin-right: 2px; }
 .voice-demo { white-space: nowrap; }
+
+
+/* Interactive local walkthrough previews */
+.demo-open-button {
+  border: 1px solid rgba(167, 119, 255, .28);
+  border-radius: 5px;
+  padding: 4px 7px;
+  background: rgba(126, 75, 210, .1);
+  color: #c8aaff;
+  font: 700 8px/1.2 inherit;
+  letter-spacing: .08em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: .2s ease;
+}
+.demo-open-button:hover { border-color: rgba(190, 151, 255, .7); background: rgba(126, 75, 210, .22); color: #fff; }
+.core-mode .demo-open-button { margin-right: 5px; }
+.quick-label { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.privacy-card-button { width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer; }
+.privacy-card-button:hover { border-color: rgba(167,119,255,.42); }
+.demo-modal { max-width: 560px; }
+.demo-intro { color: #a99dbb; font-size: 13px; line-height: 1.65; margin: 2px 0 18px; }
+.demo-progress { height: 4px; border-radius: 9px; overflow: hidden; background: rgba(255,255,255,.08); margin: 18px 0; }
+.demo-progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#7746d7,#d28bff); transition: width .35s ease; }
+.demo-steps { display: grid; gap: 9px; }
+.demo-step { display: flex; align-items: flex-start; gap: 11px; padding: 11px 12px; border: 1px solid rgba(255,255,255,.07); border-radius: 8px; background: rgba(255,255,255,.018); color: #756d82; font-size: 12px; line-height: 1.5; transition: .25s ease; }
+.demo-step i { display: grid; place-items: center; flex: 0 0 23px; width: 23px; height: 23px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; color: #8c819c; font-size: 9px; font-style: normal; font-weight: 800; }
+.demo-step.current { border-color: rgba(172,126,255,.4); color: #e3d6f5; background: rgba(126,75,210,.1); }
+.demo-step.current i,.demo-step.done i { border-color: rgba(181,139,255,.6); color: #d7b9ff; box-shadow: 0 0 12px rgba(139,92,246,.2); }
+.demo-step.done { color: #aaa0b8; }
+.demo-result { margin-top: 14px; padding: 11px 12px; border: 1px solid rgba(130,220,170,.22); border-radius: 7px; color: #a9e6c0; background: rgba(60,150,100,.07); font-size: 12px; }
+.demo-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; }
+.demo-next-button { border: 1px solid rgba(177,135,255,.5); border-radius: 6px; padding: 10px 14px; background: linear-gradient(100deg,rgba(106,60,180,.35),rgba(157,87,210,.2)); color: #f0e6ff; font: 700 10px inherit; letter-spacing: .09em; cursor: pointer; }
+.demo-next-button:disabled { opacity: .5; cursor: default; }
+.demo-next-button span { margin-left: 12px; }
+.demo-disclaimer { display: flex; align-items: flex-start; gap: 7px; margin: 18px 0 0; color: #8b8296; font-size: 10px; line-height: 1.5; }
+.demo-disclaimer svg { flex: 0 0 auto; margin-top: 1px; color: #a98bd5; }
+@media (max-width: 640px) {
+  .section-trailing { flex-wrap: wrap; justify-content: flex-end; }
+  .demo-modal { max-height: 86vh; overflow-y: auto; }
+  .demo-open-button { font-size: 7px; padding: 4px 5px; }
+}
