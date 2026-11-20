@@ -1,0 +1,90 @@
+'use client'
+
+import { useState, type FormEvent } from 'react'
+import { Activity, AudioLines, Battery, Bell, ChevronDown, Command, Cpu, Fingerprint, Gauge, Headphones, Menu, Mic, Moon, MoreHorizontal, Radio, Send, Settings2, Shield, Smartphone, Sparkles, Terminal, Wifi, Zap } from 'lucide-react'
+
+type ThemeName = 'Dark Shadow' | 'Cyber Overdrive' | 'Supreme Elite'
+
+const themes: { name: ThemeName; color: string }[] = [
+  { name: 'Dark Shadow', color: '#e11d48' },
+  { name: 'Cyber Overdrive', color: '#8b5cf6' },
+  { name: 'Supreme Elite', color: '#d6b46a' },
+]
+
+const initialLogs = [
+  { time: '14:32:08', message: 'Core systems initialized', tone: 'good' },
+  { time: '14:32:08', message: 'Neural network standing by', tone: 'good' },
+  { time: '14:32:09', message: 'Awaiting secure connection', tone: 'muted' },
+]
+
+function SectionHeading({ icon: Icon, title, trailing }: { icon: typeof Activity; title: string; trailing?: React.ReactNode }) {
+  return <div className="section-heading"><span className="section-icon"><Icon size={14} /></span><span>{title}</span>{trailing && <span className="section-trailing">{trailing}</span>}</div>
+}
+
+function SignalBars() {
+  return <div className="signal-bars" aria-hidden="true">{Array.from({ length: 34 }, (_, i) => <span key={i} style={{ height: `${7 + ((i * 13 + 9) % 24)}px` }} />)}</div>
+}
+
+function AICore() {
+  return <div className="core-stage" aria-label="VORAX AI core, standing by">
+    <div className="core-orbit orbit-one" /><div className="core-orbit orbit-two" /><div className="core-orbit orbit-three" />
+    <div className="core-sphere"><div className="core-inner"><span>V</span></div><div className="core-glint" /></div>
+    <div className="core-tick tick-a" /><div className="core-tick tick-b" /><div className="core-tick tick-c" /><div className="core-tick tick-d" />
+    <span className="core-label label-top">NEXUS / 01</span><span className="core-label label-bottom">NEURAL CORE</span>
+  </div>
+}
+
+export default function VoraxDashboard() {
+  const [theme, setTheme] = useState<ThemeName>('Dark Shadow')
+  const [command, setCommand] = useState('')
+  const [logs, setLogs] = useState(initialLogs)
+  const [notice, setNotice] = useState('')
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [notifications, setNotifications] = useState(true)
+
+  function submitCommand(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const value = command.trim()
+    if (!value) return
+    const now = new Date().toLocaleTimeString('en-GB', { hour12: false })
+    setLogs((current) => [{ time: now, message: `Command queued: “${value.slice(0, 32)}${value.length > 32 ? '…' : ''}”`, tone: 'warn' }, ...current].slice(0, 5))
+    setNotice('Command not sent — AI backend is not connected.')
+    setCommand('')
+  }
+
+  return <main className={`dashboard theme-${theme.toLowerCase().replaceAll(' ', '-')}`}>
+    <header className="topbar">
+      <button className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileOpen(!mobileOpen)}><Menu size={18} /></button>
+      <a className="brand" href="#home" aria-label="VORAX home"><span className="brand-mark">V</span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
+      <nav className={`top-nav ${mobileOpen ? 'nav-open' : ''}`} aria-label="Main navigation"><a className="nav-active" href="#command-center">Command center</a><a href="#activity">Activity</a><a href="#connections">Connections</a></nav>
+      <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> SYSTEM ONLINE</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span>V</span><ChevronDown size={13} /></button></div>
+    </header>
+
+    <div className="page-shell" id="command-center">
+      <div className="page-intro"><div><div className="eyebrow"><span className="eyebrow-line" /> PERSONAL INTELLIGENCE SYSTEM <span className="eyebrow-line" /></div><h1>Command <span>center</span></h1><p className="tagline">BEYOND COMMAND. BEYOND LIMITS.</p></div><button className="settings-trigger" onClick={() => setSettingsOpen(!settingsOpen)}><Settings2 size={15} /> Settings <span className="settings-key">⌘ ,</span></button></div>
+
+      <div className="dashboard-grid">
+        <aside className="left-column">
+          <section className="panel system-panel"><SectionHeading icon={Cpu} title="SYSTEM STATUS" trailing={<MoreHorizontal size={17} />} /><div className="status-hero"><div className="status-icon"><Fingerprint size={20} /></div><div><span className="status-title">All systems nominal</span><span className="status-subtitle">Core is ready for input</span></div><span className="status-pulse" /></div><div className="metric-list"><div className="metric-row"><span><Gauge size={14} /> Core load</span><b>12.4<span>%</span></b></div><div className="meter"><i style={{ width: '12.4%' }} /></div><div className="metric-row"><span><Battery size={14} /> Memory</span><b>3.2<span> / 16 GB</span></b></div><div className="meter violet-meter"><i style={{ width: '20%' }} /></div></div><div className="system-footer"><span><span className="live-dot" /> ENCRYPTION ACTIVE</span><span>v. 2.4.0</span></div></section>
+
+          <section className="panel connections-panel" id="connections"><SectionHeading icon={Radio} title="CONNECTIONS" trailing={<span className="connection-count">0 / 2</span>} /><div className="connection-item"><div className="connection-icon android-icon"><Smartphone size={16} /></div><div className="connection-copy"><b>Android device</b><span>Native bridge required</span></div><span className="tag-demo">DEMO</span></div><div className="connection-item"><div className="connection-icon kali-icon"><Terminal size={16} /></div><div className="connection-copy"><b>Kali Linux</b><span>API endpoint required</span></div><span className="tag-demo">DEMO</span></div><div className="connection-note"><Shield size={13} /> No devices are connected. Integrations require explicit setup.</div></section>
+
+          <section className="panel theme-panel"><SectionHeading icon={Moon} title="INTERFACE THEME" /><div className="theme-options" role="group" aria-label="Interface theme">{themes.map((option) => <button key={option.name} className={`theme-option ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)} aria-pressed={theme === option.name}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span className="theme-check">✓</span>}</button>)}</div></section>
+        </aside>
+
+        <section className="center-column"><div className="core-card panel"><div className="core-card-top"><span><span className="live-dot" /> VØRAX CORE</span><span className="core-mode"><span className="mini-square" /> STANDBY</span></div><AICore /><div className="core-greeting"><span className="greeting-overline">YOUR INTELLIGENCE, AMPLIFIED</span><h2>At your command<span>.</span></h2><p>Systems are standing by. What would you like to explore?</p></div><div className="voice-module"><button className="mic-button" aria-label="Voice input unavailable: speech integration not connected" title="Speech integration not connected"><Mic size={20} /></button><div className="voice-info"><b>Voice interface</b><span>Microphone integration unavailable</span></div><SignalBars /><span className="voice-demo">DEMO</span></div><div className="quick-commands"><span className="quick-label">QUICK ACTIONS</span><button onClick={() => setNotice('System diagnostics are a future backend capability.')}><Activity size={14} /> System diagnostics</button><button onClick={() => setNotice('No external connections are configured.')}><Wifi size={14} /> Connection status</button><button onClick={() => setNotice('Automation requires a configured backend.')}><Zap size={14} /> Automations</button></div></div>
+          <section className="panel logs-panel" id="activity"><SectionHeading icon={Activity} title="ACTIVITY LOG" trailing={<button className="text-button" onClick={() => setLogs([])}>CLEAR</button>} /><div className="logs-list">{logs.length === 0 ? <p className="empty-log">No recent activity.</p> : logs.map((log, i) => <div className="log-entry" key={`${log.time}-${log.message}-${i}`}><span className="log-dot" data-tone={log.tone} /><time>{log.time}</time><span>{log.message}</span></div>)}</div><div className="logs-bottom"><span>LOCAL SYSTEM LOG</span><span><span className="live-dot" /> LIVE</span></div></section>
+        </section>
+
+        <aside className="right-column"><section className="panel conversation-panel"><SectionHeading icon={AudioLines} title="CONVERSATION" trailing={<button className="text-button" onClick={() => setNotice('Conversation history is not persisted in this demo.')}>NEW SESSION</button>} /><div className="conversation-empty"><div className="conversation-glyph"><Command size={19} /></div><b>Your session starts here</b><p>Send a command to begin a conversation with VØRAX.</p><span>AI BACKEND NOT CONNECTED</span></div><form className="command-form" onSubmit={submitCommand}><label className="sr-only" htmlFor="command-input">Enter a command</label><input id="command-input" value={command} onChange={(event) => setCommand(event.target.value)} placeholder="Type a command..." /><button type="submit" aria-label="Send command" disabled={!command.trim()}><Send size={15} /></button></form>{notice && <div className="notice-message" role="status">{notice}<button onClick={() => setNotice('')} aria-label="Dismiss notice">×</button></div>}<div className="conversation-foot"><span><Headphones size={13} /> SECURE CHANNEL</span><span>0 TOKENS</span></div></section>
+          <section className="panel permissions-panel"><SectionHeading icon={Shield} title="PERMISSIONS" trailing={<button className="text-button" onClick={() => setSettingsOpen(true)}>MANAGE</button>} /><div className="permission-row"><span>Microphone</span><span className="permission-state">NOT GRANTED</span></div><div className="permission-row"><span>Device access</span><span className="permission-state">NOT CONNECTED</span></div><div className="permission-row"><span>Network bridge</span><span className="permission-state">NOT CONFIGURED</span></div><div className="permission-foot"><Shield size={12} /> Permissions are never requested without your action.</div></section>
+          <div className="privacy-card"><Sparkles size={16} /><div><b>Private by design</b><span>Your activity stays on this device.</span></div><span className="privacy-check">✓</span></div>
+        </aside>
+      </div>
+      <footer className="page-footer"><span>VØRAX <span className="footer-sep">/</span> PERSONAL INTELLIGENCE SYSTEM</span><span>BUILT FOR THE NEXT ERA <span className="footer-sep">·</span> <span className="footer-version">V.2.4.0</span></span></footer>
+    </div>
+
+    {settingsOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false) }}><section className="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="modal-heading"><div><span className="eyebrow-small">PREFERENCES / 01</span><h2 id="settings-title">System settings</h2></div><button className="icon-button" aria-label="Close settings" onClick={() => setSettingsOpen(false)}>×</button></div><div className="setting-group"><b>Interface theme</b><p>Choose the visual profile for your command center.</p>{themes.map((option) => <button key={option.name} className={`modal-theme ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span>ACTIVE</span>}</button>)}</div><div className="setting-group notification-setting"><div><b>System notifications</b><p>Show local interface status messages.</p></div><button className={`toggle ${notifications ? 'on' : ''}`} role="switch" aria-checked={notifications} aria-label="System notifications" onClick={() => setNotifications(!notifications)}><i /></button></div><div className="modal-note"><Shield size={14} /> Device and network permissions are not enabled in this frontend demo.</div></section></div>}
+  </main>
+}
