@@ -5,6 +5,20 @@ import { Activity, AudioLines, Battery, Bell, ChevronDown, Command, Cpu, Fingerp
 
 type ThemeName = 'Dark Shadow' | 'Cyber Overdrive' | 'Supreme Elite'
 
+type VoiceProfile = { name: string; pitch: number; rate: number; description: string }
+const voiceProfiles: VoiceProfile[] = [
+  { name: 'ABYSS', pitch: 0.72, rate: 0.86, description: 'Deep and measured' },
+  { name: 'OVERLORD', pitch: 0.82, rate: 0.94, description: 'Commanding and steady' },
+  { name: 'PHANTOM', pitch: 0.92, rate: 0.82, description: 'Quiet and mysterious' },
+  { name: 'TITAN', pitch: 0.68, rate: 0.92, description: 'Heavy and powerful' },
+  { name: 'NEMESIS', pitch: 0.78, rate: 1.04, description: 'Sharp and intense' },
+  { name: 'SPECTRE', pitch: 1.08, rate: 0.96, description: 'Synthetic and futuristic' },
+  { name: 'OMEGA', pitch: 0.88, rate: 0.9, description: 'Calm and composed' },
+  { name: 'SHADOW', pitch: 0.64, rate: 0.8, description: 'Low and restrained' },
+  { name: 'APEX', pitch: 1.0, rate: 1.02, description: 'Crisp and precise' },
+  { name: 'VOID', pitch: 0.74, rate: 0.76, description: 'Slow and atmospheric' },
+]
+
 const themes: { name: ThemeName; color: string }[] = [
   { name: 'Dark Shadow', color: '#e11d48' },
   { name: 'Cyber Overdrive', color: '#8b5cf6' },
@@ -69,6 +83,50 @@ export default function VoraxDashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [notifications, setNotifications] = useState(true)
+  const [voiceProfile, setVoiceProfile] = useState('ABYSS')
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+
+  function speak(text: string, profileName = voiceProfile) {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      setNotice('Speech synthesis is not supported by this browser.')
+      return
+    }
+    window.speechSynthesis.cancel()
+    const profile = voiceProfiles.find((item) => item.name === profileName) ?? voiceProfiles[0]
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'en-IN'
+    utterance.pitch = profile.pitch
+    utterance.rate = profile.rate
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+    window.speechSynthesis.speak(utterance)
+  }
+
+  function startVoiceInput() {
+    if (typeof window === 'undefined') return
+    const speechWindow = window as Window & { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any }
+    const SpeechRecognitionCtor = speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition
+    if (!SpeechRecognitionCtor) {
+      setNotice('Voice recognition is not supported here. Try a supported browser or use text input.')
+      return
+    }
+    const recognition = new SpeechRecognitionCtor()
+    recognition.lang = 'en-IN'
+    recognition.interimResults = false
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => { setIsListening(false); setNotice('Microphone recognition stopped. Check browser microphone permission.') }
+    recognition.onresult = (event: any) => {
+      const transcript = event.results?.[0]?.[0]?.transcript?.trim()
+      if (!transcript) return
+      setCommand(transcript)
+      setNotice('Voice captured. VØRAX AI backend is not connected yet, so this command has not been executed.')
+      speak('I heard your command. The VORAX AI backend is not connected yet.', voiceProfile)
+    }
+    try { recognition.start() } catch { setIsListening(false); setNotice('Voice recognition is already active or unavailable.') }
+  }
 
   if (!commandCenterOpen) return <ShadowPortal expanding={portalExpanding} onEnter={enterCommandCenter} />
 
@@ -87,7 +145,7 @@ export default function VoraxDashboard() {
       <button className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileOpen(!mobileOpen)}><Menu size={18} /></button>
       <a className="brand" href="#portal" aria-label="Return to VORAX portal" onClick={(event) => { event.preventDefault(); setPortalExpanding(false); setCommandCenterOpen(false) }}><span className="brand-mark">V</span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
       <nav className={`top-nav ${mobileOpen ? 'nav-open' : ''}`} aria-label="Main navigation"><a className="nav-active" href="#command-center">Command center</a><a href="#activity">Activity</a><a href="#connections">Connections</a></nav>
-      <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> SYSTEM ONLINE</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span>V</span><ChevronDown size={13} /></button></div>
+      <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> FRONTEND DEMO</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span>V</span><ChevronDown size={13} /></button></div>
     </header>
 
     <div className="page-shell" id="command-center">
@@ -95,14 +153,14 @@ export default function VoraxDashboard() {
 
       <div className="dashboard-grid">
         <aside className="left-column">
-          <section className="panel system-panel"><SectionHeading icon={Cpu} title="SYSTEM STATUS" trailing={<MoreHorizontal size={17} />} /><div className="status-hero"><div className="status-icon"><Fingerprint size={20} /></div><div><span className="status-title">All systems nominal</span><span className="status-subtitle">Core is ready for input</span></div><span className="status-pulse" /></div><div className="metric-list"><div className="metric-row"><span><Gauge size={14} /> Core load</span><b>12.4<span>%</span></b></div><div className="meter"><i style={{ width: '12.4%' }} /></div><div className="metric-row"><span><Battery size={14} /> Memory</span><b>3.2<span> / 16 GB</span></b></div><div className="meter violet-meter"><i style={{ width: '20%' }} /></div></div><div className="system-footer"><span><span className="live-dot" /> ENCRYPTION ACTIVE</span><span>v. 2.4.0</span></div></section>
+          <section className="panel system-panel"><SectionHeading icon={Cpu} title="SYSTEM STATUS" trailing={<MoreHorizontal size={17} />} /><div className="status-hero"><div className="status-icon"><Fingerprint size={20} /></div><div><span className="status-title">Interface loaded</span><span className="status-subtitle">AI backend not connected</span></div><span className="status-pulse" /></div><div className="metric-list"><div className="metric-row"><span><Gauge size={14} /> AI backend</span><b>OFFLINE</b></div><div className="metric-row"><span><Battery size={14} /> Android bridge</span><b>NOT LINKED</b></div></div><div className="system-footer"><span><span className="live-dot" /> LOCAL UI READY</span><span>v. 2.4.0</span></div></section>
 
           <section className="panel connections-panel" id="connections"><SectionHeading icon={Radio} title="CONNECTIONS" trailing={<span className="connection-count">0 / 2</span>} /><div className="connection-item"><div className="connection-icon android-icon"><Smartphone size={16} /></div><div className="connection-copy"><b>Android device</b><span>Native bridge required</span></div><span className="tag-demo">DEMO</span></div><div className="connection-item"><div className="connection-icon kali-icon"><Terminal size={16} /></div><div className="connection-copy"><b>Kali Linux</b><span>API endpoint required</span></div><span className="tag-demo">DEMO</span></div><div className="connection-note"><Shield size={13} /> No devices are connected. Integrations require explicit setup.</div></section>
 
           <section className="panel theme-panel"><SectionHeading icon={Moon} title="INTERFACE THEME" /><div className="theme-options" role="group" aria-label="Interface theme">{themes.map((option) => <button key={option.name} className={`theme-option ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)} aria-pressed={theme === option.name}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span className="theme-check">✓</span>}</button>)}</div></section>
         </aside>
 
-        <section className="center-column"><div className="core-card panel"><div className="core-card-top"><span><span className="live-dot" /> VØRAX CORE</span><span className="core-mode"><span className="mini-square" /> STANDBY</span></div><AICore /><div className="core-greeting"><span className="greeting-overline">YOUR INTELLIGENCE, AMPLIFIED</span><h2>At your command<span>.</span></h2><p>Systems are standing by. What would you like to explore?</p></div><div className="voice-module"><button className="mic-button" aria-label="Voice input unavailable: speech integration not connected" title="Speech integration not connected"><Mic size={20} /></button><div className="voice-info"><b>Voice interface</b><span>Microphone integration unavailable</span></div><SignalBars /><span className="voice-demo">DEMO</span></div><div className="quick-commands"><span className="quick-label">QUICK ACTIONS</span><button onClick={() => setNotice('System diagnostics are a future backend capability.')}><Activity size={14} /> System diagnostics</button><button onClick={() => setNotice('No external connections are configured.')}><Wifi size={14} /> Connection status</button><button onClick={() => setNotice('Automation requires a configured backend.')}><Zap size={14} /> Automations</button></div></div>
+        <section className="center-column"><div className={`core-card panel ${isSpeaking ? 'core-speaking' : ''}`}><div className="core-card-top"><span><span className="live-dot" /> VØRAX CORE</span><span className="core-mode"><span className="mini-square" /> STANDBY</span></div><AICore /><div className="core-greeting"><span className="greeting-overline">YOUR INTELLIGENCE, AMPLIFIED</span><h2>At your command<span>.</span></h2><p>Systems are standing by. What would you like to explore?</p></div><div className="voice-module"><button className={`mic-button ${isListening ? 'is-listening' : ''}`} onClick={startVoiceInput} aria-label="Start voice input" title="Start foreground voice input"><Mic size={20} /></button><div className="voice-info"><b>Voice interface</b><span>{isListening ? 'Listening…' : isSpeaking ? `Speaking · ${voiceProfile}` : 'Tap microphone to speak'}</span></div><SignalBars /><span className="voice-demo">DEMO</span></div><div className="quick-commands"><span className="quick-label">QUICK ACTIONS</span><button onClick={() => setNotice('System diagnostics are a future backend capability.')}><Activity size={14} /> System diagnostics</button><button onClick={() => setNotice('No external connections are configured.')}><Wifi size={14} /> Connection status</button><button onClick={() => setNotice('Automation requires a configured backend.')}><Zap size={14} /> Automations</button></div></div>
           <section className="panel logs-panel" id="activity"><SectionHeading icon={Activity} title="ACTIVITY LOG" trailing={<button className="text-button" onClick={() => setLogs([])}>CLEAR</button>} /><div className="logs-list">{logs.length === 0 ? <p className="empty-log">No recent activity.</p> : logs.map((log, i) => <div className="log-entry" key={`${log.time}-${log.message}-${i}`}><span className="log-dot" data-tone={log.tone} /><time>{log.time}</time><span>{log.message}</span></div>)}</div><div className="logs-bottom"><span>LOCAL SYSTEM LOG</span><span><span className="live-dot" /> LIVE</span></div></section>
         </section>
 
@@ -114,6 +172,6 @@ export default function VoraxDashboard() {
       <footer className="page-footer"><span>VØRAX <span className="footer-sep">/</span> PERSONAL INTELLIGENCE SYSTEM</span><span>BUILT FOR THE NEXT ERA <span className="footer-sep">·</span> <span className="footer-version">V.2.4.0</span></span></footer>
     </div>
 
-    {settingsOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false) }}><section className="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="modal-heading"><div><span className="eyebrow-small">PREFERENCES / 01</span><h2 id="settings-title">System settings</h2></div><button className="icon-button" aria-label="Close settings" onClick={() => setSettingsOpen(false)}>×</button></div><div className="setting-group"><b>Interface theme</b><p>Choose the visual profile for your command center.</p>{themes.map((option) => <button key={option.name} className={`modal-theme ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span>ACTIVE</span>}</button>)}</div><div className="setting-group notification-setting"><div><b>System notifications</b><p>Show local interface status messages.</p></div><button className={`toggle ${notifications ? 'on' : ''}`} role="switch" aria-checked={notifications} aria-label="System notifications" onClick={() => setNotifications(!notifications)}><i /></button></div><div className="modal-note"><Shield size={14} /> Device and network permissions are not enabled in this frontend demo.</div></section></div>}
+    {settingsOpen && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setSettingsOpen(false) }}><section className="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="modal-heading"><div><span className="eyebrow-small">PREFERENCES / 01</span><h2 id="settings-title">System settings</h2></div><button className="icon-button" aria-label="Close settings" onClick={() => setSettingsOpen(false)}>×</button></div><div className="setting-group"><b>Interface theme</b><p>Choose the visual profile for your command center.</p>{themes.map((option) => <button key={option.name} className={`modal-theme ${theme === option.name ? 'selected' : ''}`} onClick={() => setTheme(option.name)}><i style={{ '--swatch': option.color } as React.CSSProperties} />{option.name}{theme === option.name && <span>ACTIVE</span>}</button>)}</div><div className="setting-group notification-setting"><div><b>System notifications</b><p>Show local interface status messages.</p></div><button className={`toggle ${notifications ? 'on' : ''}`} role="switch" aria-checked={notifications} aria-label="System notifications" onClick={() => setNotifications(!notifications)}><i /></button></div><div className="setting-group"><b>VØRAX voice profile</b><p>Preview these ten pitch-and-speed profiles using your browser's installed speech voice. They are presets, not ten separate neural voices.</p><div className="voice-profile-list">{voiceProfiles.map((profile) => <div key={profile.name} className="voice-profile-row"><div><b>{profile.name}</b><span>{profile.description}</span></div><button className={voiceProfile === profile.name ? 'voice-selected' : ''} onClick={() => setVoiceProfile(profile.name)}>{voiceProfile === profile.name ? 'SELECTED' : 'SELECT'}</button><button onClick={() => speak('I am VORAX. The Supreme Intelligence. Systems online. Awaiting your command.', profile.name)}>PREVIEW</button></div>)}</div><button className="text-button" onClick={() => { window.speechSynthesis?.cancel(); setIsSpeaking(false) }}>STOP VOICE</button></div><div className="modal-note"><Shield size={14} /> Voice recognition runs only after you tap the microphone while this page is open. Background “Hey VØRAX” wake-word support requires a native Android app.</div></section></div>}
   </main>
 }
