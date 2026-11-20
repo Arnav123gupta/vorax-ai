@@ -34,14 +34,42 @@ function AICore() {
   </div>
 }
 
+function ShadowPortal({ expanding, onEnter }: { expanding: boolean; onEnter: () => void }) {
+  return <main className={`portal-page ${expanding ? 'portal-expanding' : ''}`}>
+    <div className="portal-grain" aria-hidden="true" />
+    <div className="portal-topline"><a className="portal-brand" href="#portal"><span className="portal-brand-mark">V</span> VØRAX</a><span className="portal-top-status"><i /> SYSTEM DORMANT</span></div>
+    <div className="portal-copy"><span className="portal-eyebrow"><i /> A SIGNAL IN THE DARK <i /></span><h1>Beyond the <span>veil.</span></h1><p>Intelligence awaits on the other side.</p></div>
+    <button className="shadow-gate" onClick={onEnter} aria-label="Enter the VORAX command center" aria-busy={expanding}>
+      <span className="portal-haze haze-one" /><span className="portal-haze haze-two" />
+      <span className="portal-ring ring-outer" /><span className="portal-ring ring-middle" /><span className="portal-ring ring-inner" />
+      <span className="portal-rift"><span className="portal-eye"><span className="eye-mark">V</span><i /></span><span className="portal-depth" /></span>
+      <span className="portal-orbit orbit-a" /><span className="portal-orbit orbit-b" />
+      <span className="portal-particle particle-a" /><span className="portal-particle particle-b" /><span className="portal-particle particle-c" /><span className="portal-particle particle-d" /><span className="portal-particle particle-e" />
+      <span className="portal-enter"><span>{expanding ? 'CROSSING THE VEIL' : 'ENTER THE PORTAL'}</span><span aria-hidden="true">↗</span></span>
+    </button>
+    <div className="portal-bottom"><span>VØRAX <i> / </i> SUPREME INTELLIGENCE</span><span>BEYOND COMMAND. BEYOND LIMITS.</span></div>
+  </main>
+}
+
 export default function VoraxDashboard() {
   const [theme, setTheme] = useState<ThemeName>('Dark Shadow')
+  const [commandCenterOpen, setCommandCenterOpen] = useState(false)
+  const [portalExpanding, setPortalExpanding] = useState(false)
+
+  function enterCommandCenter() {
+    if (portalExpanding) return
+    setPortalExpanding(true)
+    window.setTimeout(() => setCommandCenterOpen(true), 1150)
+  }
+
   const [command, setCommand] = useState('')
   const [logs, setLogs] = useState(initialLogs)
   const [notice, setNotice] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [notifications, setNotifications] = useState(true)
+
+  if (!commandCenterOpen) return <ShadowPortal expanding={portalExpanding} onEnter={enterCommandCenter} />
 
   function submitCommand(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -56,7 +84,7 @@ export default function VoraxDashboard() {
   return <main className={`dashboard theme-${theme.toLowerCase().replaceAll(' ', '-')}`}>
     <header className="topbar">
       <button className="mobile-menu icon-button" aria-label="Toggle navigation" onClick={() => setMobileOpen(!mobileOpen)}><Menu size={18} /></button>
-      <a className="brand" href="#home" aria-label="VORAX home"><span className="brand-mark">V</span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
+      <a className="brand" href="#portal" aria-label="Return to VORAX portal" onClick={(event) => { event.preventDefault(); setPortalExpanding(false); setCommandCenterOpen(false) }}><span className="brand-mark">V</span><span className="brand-word">VØRAX<span className="brand-dot">.</span></span><span className="brand-divider" /><span className="brand-caption">SUPREME INTELLIGENCE</span></a>
       <nav className={`top-nav ${mobileOpen ? 'nav-open' : ''}`} aria-label="Main navigation"><a className="nav-active" href="#command-center">Command center</a><a href="#activity">Activity</a><a href="#connections">Connections</a></nav>
       <div className="top-actions"><div className="clock-pill"><span className="live-dot" /> SYSTEM ONLINE</div><button className="icon-button notification-button" aria-label="Notifications"><Bell size={16} /><i /></button><button className="profile-button" aria-label="Open profile menu"><span>V</span><ChevronDown size={13} /></button></div>
     </header>
