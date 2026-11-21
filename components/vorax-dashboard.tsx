@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { Activity, AudioLines, Command, Cpu, Menu, Mic, Send, Settings2, Shield } from 'lucide-react'
+import { Activity, AudioLines, Battery, Command, Cpu, Fingerprint, Gauge, Headphones, Menu, Mic, Moon, Radio, Send, Settings2, Shield, Smartphone, Terminal } from 'lucide-react'
 
 type ThemeName = 'Dark Shadow' | 'Cyber Overdrive' | 'Supreme Elite'
 
