@@ -1,24 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
- <radialGradient id="bg" cx="50%" cy="42%" r="72%"><stop stop-color="#17072d"/><stop offset=".58" stop-color="#080411"/><stop offset="1" stop-color="#020205"/></radialGradient>
- <radialGradient id="portal"><stop stop-color="#12051f"/><stop offset=".58" stop-color="#5b13bd"/><stop offset=".78" stop-color="#d84cff"/><stop offset="1" stop-color="#23064f"/></radialGradient>
- <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0caff"/><stop offset=".45" stop-color="#9b45ff"/><stop offset="1" stop-color="#3c087e"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <radialGradient id="bg" cx="50%" cy="42%" r="72%"><stop stop-color="#21083a"/><stop offset=".52" stop-color="#090511"/><stop offset="1" stop-color="#010104"/></radialGradient>
+ <radialGradient id="portal"><stop stop-color="#10051d"/><stop offset=".55" stop-color="#6415c8"/><stop offset=".78" stop-color="#e05cff"/><stop offset="1" stop-color="#260653"/></radialGradient>
+ <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0ff"/><stop offset=".32" stop-color="#d58aff"/><stop offset=".65" stop-color="#8e31e8"/><stop offset="1" stop-color="#310765"/></linearGradient>
+ <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff3ff"/><stop offset=".38" stop-color="#d18aff"/><stop offset="1" stop-color="#7420c9"/></linearGradient>
+ <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="11" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="smoke" x="-60%" y="-60%" width="220%" height="220%"><feTurbulence type="fractalNoise" baseFrequency=".012 .035" numOctaves="3" seed="17" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="24" xChannelSelector="R" yChannelSelector="B"/><feGaussianBlur stdDeviation="7"/></filter>
+ <filter id="textPop" x="-35%" y="-55%" width="170%" height="220%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="shadowBlur"/><feOffset in="shadowBlur" dx="0" dy="8" result="shadow"/><feFlood flood-color="#050008" flood-opacity=".95" result="shadowColor"/><feComposite in="shadowColor" in2="shadow" operator="in" result="shadowOut"/><feMerge><feMergeNode in="shadowOut"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <clipPath id="round"><rect width="512" height="512" rx="112"/></clipPath>
 </defs>
 <g clip-path="url(#round)">
  <rect width="512" height="512" fill="url(#bg)"/>
- <circle cx="256" cy="228" r="183" fill="none" stroke="#7d24db" stroke-width="19" opacity=".45" filter="url(#glow)"/>
- <circle cx="256" cy="228" r="174" fill="none" stroke="url(#metal)" stroke-width="8"/>
- <circle cx="256" cy="228" r="153" fill="url(#portal)" opacity=".52"/>
- <path d="M256 65 282 108 256 137 230 108Z" fill="url(#metal)" filter="url(#glow)"/>
- <path d="M119 227c13-82 74-137 137-137s124 55 137 137" fill="none" stroke="#c45cff" stroke-width="5" opacity=".8"/>
- <path d="M102 242c34-22 62-63 80-97 21 28 45 42 74 45 29-3 53-17 74-45 18 34 46 75 80 97-14 68-66 119-154 139-88-20-140-71-154-139Z" fill="#07040e" stroke="url(#metal)" stroke-width="8"/>
- <path d="M162 237 220 255 193 270Z" fill="#d88cff" filter="url(#glow)"/>
- <path d="M350 237 292 255 319 270Z" fill="#d88cff" filter="url(#glow)"/>
- <path d="M256 274v72" stroke="#852cff" stroke-width="5" opacity=".8"/>
- <circle cx="256" cy="357" r="25" fill="#10051e" stroke="#c04dff" stroke-width="7" filter="url(#glow)"/>
- <path d="M118 407h276" stroke="#8d2bea" stroke-width="5" opacity=".8"/>
- <path d="m155 414 30 18 71 0 71 0 30-18" fill="none" stroke="#ef315f" stroke-width="5"/>
- <text x="256" y="476" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="900" letter-spacing="8" fill="url(#metal)">VØRAX</text>
+ <!-- drifting smoke around the portal -->
+ <g fill="none" stroke-linecap="round" filter="url(#smoke)" opacity=".48">
+  <path d="M35 188C80 130 42 95 111 66s91 16 115-25M20 310c65-27 59-82 110-91s58 28 85 3M490 151c-61-42-41-86-105-96s-80 23-111-8M500 331c-70-20-71-77-128-83s-66 24-93 2" stroke="#a64cff" stroke-width="25"/>
+  <path d="M47 370c55-48 24-83 89-104s75 8 100-23M469 390c-62-40-35-89-99-105s-73 8-100-17" stroke="#ef3b80" stroke-width="17" opacity=".7"/>
+ </g>
+ <g fill="none" stroke="#a64cff" stroke-width="3" opacity=".2" filter="url(#glow)">
+  <path d="M32 168c58-33 32-77 103-103M479 185c-48-37-30-76-94-99M25 337c53-24 47-63 94-82M485 340c-59-29-52-70-105-86"/>
+ </g>
+ <circle cx="256" cy="222" r="183" fill="none" stroke="#7d24db" stroke-width="22" opacity=".4" filter="url(#glow)"/>
+ <circle cx="256" cy="222" r="174" fill="none" stroke="url(#metal)" stroke-width="8"/>
+ <circle cx="256" cy="222" r="153" fill="url(#portal)" opacity=".56"/>
+ <path d="M256 59 282 102 256 131 230 102Z" fill="url(#metal)" filter="url(#glow)"/>
+ <path d="M119 221c13-82 74-137 137-137s124 55 137 137" fill="none" stroke="#c45cff" stroke-width="5" opacity=".8"/>
+ <path d="M102 236c34-22 62-63 80-97 21 28 45 42 74 45 29-3 53-17 74-45 18 34 46 75 80 97-14 68-66 119-154 139-88-20-140-71-154-139Z" fill="#07040e" stroke="url(#metal)" stroke-width="8"/>
+ <path d="M162 231 220 249 193 264Z" fill="#e4a0ff" filter="url(#glow)"/>
+ <path d="M350 231 292 249 319 264Z" fill="#e4a0ff" filter="url(#glow)"/>
+ <path d="M256 268v72" stroke="#852cff" stroke-width="5" opacity=".8"/>
+ <circle cx="256" cy="351" r="25" fill="#10051e" stroke="#c04dff" stroke-width="7" filter="url(#glow)"/>
+ <!-- energetic brush streaks framing the wordmark -->
+ <g fill="none" stroke-linecap="round" filter="url(#glow)">
+  <path d="M58 407c46-10 73-3 111 3M343 410c40-10 73-13 111-3" stroke="#a63cff" stroke-width="7"/>
+  <path d="M105 424c50 8 87 4 120-1M287 423c37 8 74 6 120-3" stroke="#f04a86" stroke-width="4"/>
+  <path d="M143 397l-29 17 37-4M369 397l29 17-37-4" stroke="#e3a0ff" stroke-width="4"/>
+ </g>
+ <path d="M117 438h278" stroke="#8d2bea" stroke-width="3" opacity=".8"/>
+ <!-- extruded, sharp-edged VØRAX lettering -->
+ <text x="256" y="488" text-anchor="middle" font-family="Impact,'Arial Black',Arial,sans-serif" font-size="48" font-weight="900" letter-spacing="5" fill="#21063d" stroke="#21063d" stroke-width="8" paint-order="stroke" transform="translate(0 7)">VØRAX</text>
+ <text x="256" y="481" text-anchor="middle" font-family="Impact,'Arial Black',Arial,sans-serif" font-size="48" font-weight="900" letter-spacing="5" fill="url(#ink)" stroke="#f1caff" stroke-width="1.4" paint-order="stroke" filter="url(#textPop)">VØRAX</text>
+ <path d="M144 464l18-8M350 456l18 8" stroke="#fff0ff" stroke-width="2" opacity=".85"/>
 </g></svg>
