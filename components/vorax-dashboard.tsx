@@ -36,7 +36,7 @@ function SignalBars() {
 function AICore() {
   return <div className="core-stage" aria-label="VORAX AI core, standing by">
     <div className="core-orbit orbit-one" /><div className="core-orbit orbit-two" /><div className="core-orbit orbit-three" />
-    <div className="core-sphere"><div className="core-inner"><span className="core-vortex-symbol" aria-hidden="true" /></div><div className="core-glint" /></div>
+    <div className="core-sphere"><div className="core-inner"><img className="core-logo-image" src="/vorax-core-mark.svg" alt="VØRAX phantom emblem" /></div><div className="core-glint" /></div>
     <div className="core-tick tick-a" /><div className="core-tick tick-b" /><div className="core-tick tick-c" /><div className="core-tick tick-d" />
     <span className="core-label label-top">NEXUS / 01</span><span className="core-label label-bottom">NEURAL CORE</span>
   </div>
