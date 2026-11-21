@@ -117,6 +117,16 @@ export default function VoraxDashboard() {
     utterance.lang = 'en-IN'
     utterance.pitch = profile.pitch
     utterance.rate = profile.rate
+
+    // Prefer an installed masculine English voice on phones and desktops.
+    // Voice availability is controlled by the device/browser speech engine.
+    const voices = window.speechSynthesis.getVoices()
+    const masculineName = /\b(male|david|daniel|george|james|mark|guy|ryan|alex|aaron|fred|tom|ravi|rishi|andrew|arthur|oliver|thomas)\b/i
+    const feminineName = /\b(female|zira|samantha|victoria|karen|susan|hazel|siri female|google uk english female)\b/i
+    const englishVoices = voices.filter((voice) => /^en(-|$)/i.test(voice.lang))
+    const maleVoice = englishVoices.find((voice) => masculineName.test(voice.name) && !feminineName.test(voice.name))
+      ?? voices.find((voice) => masculineName.test(voice.name) && !feminineName.test(voice.name))
+    if (maleVoice) utterance.voice = maleVoice
     utterance.onstart = () => setIsSpeaking(true)
     utterance.onend = () => setIsSpeaking(false)
     utterance.onerror = () => setIsSpeaking(false)
